@@ -5,22 +5,30 @@ using System.Text;
 
 namespace Sportsmen
 {
-    class Doctor : IDoctor
+    public class Doctor : IDoctor
     {
         public int startPointY { get; set; }
+
+        public int startPointX { get; set; }
+       
         public int X { get; set; }
         public int Y { get; set; }
         public double Speed { get; set; }
         public bool Working { get; set; }
-        public Sportsman sportsman {get; set;}
-        public void Movement()
+
+        public Doctor(int startPointY, int X, int Y, double Speed)
         {
-            Y -= (int)(Speed * 10);
+            this.startPointY = startPointY;
+            this.X = X;
+            this.Y = Y;
+            this.Speed = Speed;
         }
 
-        public void RunBack()
+        public void MovementTo(int x, int y)
         {
-            Y += (int)(Speed * 10);
+            X += Math.Sign(x - X) * (int)(Speed * 10);
+            Y += Math.Sign(y - Y) * (int)(Speed * 10);
         }
+
     }
 }

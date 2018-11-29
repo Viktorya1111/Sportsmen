@@ -9,10 +9,8 @@ using System.Drawing;
 
 namespace Sportsmen
 {
-    public delegate void OnInjury(Sportsman sportsmen);
     public class Sportsman
     {
-        public event OnInjury GetInjury;
         public int Num { get; set; }
         public int Place { get; set; }
         public bool Injury { get; set; }
@@ -21,6 +19,18 @@ namespace Sportsmen
         public int X { get; set; }
         public int Y { get; set; }
 
+
+
+        public Sportsman(int num, int place, bool injury, double injuryRate, double speed, int x, int y)
+        {
+            Num = num;
+            Place = place;
+            Injury = injury;
+            InjuryRate = injuryRate;
+            Speed = speed;
+            X = x;
+            Y = y;
+        }
 
         public void Movement()
         {
@@ -32,7 +42,6 @@ namespace Sportsmen
             if (k <= InjuryRate)
             {
                 Injury = true;
-                GetInjury(this);
             }
         }
     }

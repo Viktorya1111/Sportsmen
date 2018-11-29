@@ -9,6 +9,6 @@ namespace Sportsmen
     interface IDoctor
     {
         bool Working{get; set;}
-        void Movement();
+        void MovementTo(int x, int y);
     }
 }
