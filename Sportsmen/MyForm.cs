@@ -27,7 +27,8 @@ namespace Sportsmen
             j = 0;
             g = CreateGraphics();
             c = new Competition(p1, p2);
-            c.doc = new Doctor(200, p1.X, 200, 0.1);
+            c.doc1 = new Doctor(200, p1.X, 200, 0.1);
+            c.doc2 = new Doctor(200, p1.X, 200, 0.1);
             InputStart();
 
         }
@@ -56,8 +57,12 @@ namespace Sportsmen
         {
             Sportsman s1 = new Sportsman(1, 0, false, 0.003, 0.1, c.start.X, c.start.Y);
             Sportsman s2 = new Sportsman(2, 0, false, 0.023, 0.7, c.start.X, c.start.Y + 20);
+            Sportsman s3 = new Sportsman(3, 0, false, 0.034, 0.8, c.start.X, c.start.Y + 40);
+            Sportsman s4 = new Sportsman(4, 0, false, 0.009, 0.5, c.start.X, c.start.Y + 60);
             c.Sportsmens.Add(s1);
             c.Sportsmens.Add(s2);
+            c.Sportsmens.Add(s3);
+            c.Sportsmens.Add(s4);
         }
 
         private void Input_Click(object sender, EventArgs e)

@@ -11,6 +11,7 @@ namespace Sportsmen
     {
         public Point start;
         public Point finish;
+        object place = new object();
 
         public bool finishRace;
 
@@ -25,7 +26,9 @@ namespace Sportsmen
             }
         }
         public List<Sportsman> Sportsmens { get; set; }
-        public Doctor doc;
+        public Doctor doc1;
+        public Doctor doc2;
+
         public Competition(Point Start, Point Finish)
         {
             start = Start;
@@ -43,8 +46,10 @@ namespace Sportsmen
                 threads.Add(t1);
                 threads[i].Start(Sportsmens[i]);
             }
-            Thread doctor = new Thread(new ThreadStart(DoctorWorking));
-            doctor.Start();
+            Thread doctor1 = new Thread(new ParameterizedThreadStart(DoctorWorking));
+            Thread doctor2 = new Thread(new ParameterizedThreadStart(DoctorWorking));
+            doctor1.Start(doc1);
+            doctor2.Start(doc2);
         }
 
         private void SportsmenMove(object sportsman)
@@ -59,30 +64,37 @@ namespace Sportsmen
                     Thread.Sleep(10);
                 }
             }
-            s.Place = currentPlace;
-            currentPlace++;
+            lock (place)
+            {
+                s.Place = (int)currentPlace;
+                currentPlace++;
+            }
         }
 
 
-        private void DoctorWorking()
+        private void DoctorWorking(object docs)
         {
+            Doctor doc = (Doctor)docs;
             while (!finishRace)
             {
                 Sportsmens.ForEach(s =>
                 {
-                    if (s.Injury)
+                    if (s.Injury && Monitor.TryEnter(s))
                     {
-                        doc.Working = true;
-                        int x = Math.Abs(doc.X - s.X);
-                        int y = Math.Abs(doc.Y - s.Y);
-
-                        while (Math.Abs(doc.X - s.X) >= 0.5 || Math.Abs(doc.Y - s.Y) >= 0.5)
+                        lock (s)
                         {
-                            doc.MovementTo(s.X, s.Y);
-                            Thread.Sleep(10);
+                                doc.Working = true;
+                                int x = Math.Abs(doc.X - s.X);
+                                int y = Math.Abs(doc.Y - s.Y);
+
+                                while (Math.Abs(doc.X - s.X) >= 0.5 || Math.Abs(doc.Y - s.Y) >= 0.5)
+                                {
+                                    doc.MovementTo(s.X, s.Y);
+                                    Thread.Sleep(10);
+                                }
+                                Thread.Sleep(1500);
+                                s.Injury = false;
                         }
-                        Thread.Sleep(1500);
-                        s.Injury = false;
                     }
                 });
                 if (doc.Y < doc.startPointY)
@@ -94,9 +106,7 @@ namespace Sportsmen
                     doc.Working = false;
                     Thread.Sleep(500);
                 }
-                
             }
         }
-
     }
 }

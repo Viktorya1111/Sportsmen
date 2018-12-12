@@ -29,8 +29,10 @@ namespace Sportsmen
 
             }
 
-            if (c.doc.Working)
-               g.FillEllipse(Brushes.Red, c.doc.X, c.doc.Y, 15, 15);
+            if (c.doc1.Working)
+               g.FillEllipse(Brushes.Red, c.doc1.X, c.doc1.Y, 15, 15);
+            if (c.doc2.Working)
+                g.FillEllipse(Brushes.Red, c.doc2.X, c.doc2.Y, 15, 15);
 
         }
     }
